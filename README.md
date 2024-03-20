@@ -11,20 +11,20 @@ Time spent: **5** hours spent in total
 The following **required** functionality is completed:
 
 - [x] User can view and answer at least 5 trivia questions.
-- [ ] App retrieves question data from the Open Trivia Database API.
-- [ ] Fetch a different set of questions if the user indicates they would like to reset the game.
-- [ ] Users can see score after submitting all questions.
-- [ ] True or False questions only have two options.
+- [x] App retrieves question data from the Open Trivia Database API.
+- [x] Fetch a different set of questions if the user indicates they would like to reset the game.
+- [x] Users can see score after submitting all questions.
+- [x] True or False questions only have two options.
 
 ## Video Walkthrough
 
 Here is a reminder on how to embed Loom videos on GitHub. Feel free to remove this reminder once you upload your README. 
 
-[Guide]](https://www.youtube.com/watch?v=pI1vrhiqRxw) .
+[Guide](https://youtu.be/0W7mO1XXEKc).
 
 ## Notes
 
-I was not able to properly finish this project. I could not get the questions to update the the user pressed the restart button. 
+I was not able to properly finish this project. I could not get each category of a question to update. I also could not get the user to choose a specific category and difficulty of the questions
 
 ## License
 
