@@ -12,13 +12,31 @@ extension Collection {
         return indices.contains(index) ? self[index] : nil
     }
 }
+extension String {
+    /*Method responsible for decoding HTML entities from a string. HTML entities are special sequences of characters that are used to represent characters that are difficult or impossible to type directly. For example, "&quot;" represents a double quote character ("), "&amp;" represents an ampersand (&), etc.*/
+    /*To properly display text on my app, I need to decode these HTML entities back to their original characters*/
+    func decodeHTMLEntities() -> String? {
+        /*converts the string to data using UTF-8 encoding*/
+        guard let data = self.data(using: .utf8) else {
+            return nil
+        }
+        do {
+            /*creates an NSAttributedString from the data, specifying that it's HTML data. An NSAttributedString is a swift type that represents styled and formatted text. This attributed string can be used to display rich text in user interfaces, such as in labels, text views, or buttons*/
+            let attributedString = try NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil)
+            return attributedString.string
+        } catch {
+            print("Error decoding HTML entities: \(error)")
+            return nil
+        }
+    }
+}
 
 /*Contains the logic for displaying trivia questions, handling user input for answering questions, updating the game state, etc.*/
 class TriviaViewController: UIViewController {
     /*Contains IBOutlets for displaying the trivia question number, question asked, and answer choices, IBActions for handling button taps when the user selects an answer, and handles presenting the game over popup when the game ends*/
     @IBOutlet weak var QuestionAsked: UILabel!
     @IBOutlet weak var questionHeader: UILabel!
-    
+    @IBOutlet weak var CategoryLabel: UILabel!
     
     /*IBOutlets allows me to reference the buttons
      in the code and modify its physical properties*/
@@ -38,10 +56,10 @@ class TriviaViewController: UIViewController {
     
     @IBAction func answerButton4(_ sender: UIButton) {
     }
-    
+    let triviaService = TriviaQuestionService()
     let maxClickCount = 5
     
-    var correctAnswer = ""
+    var correct_answer = ""
     var gameOverTitle = "Game Over!"
     var gameOverMessage = ""
     var clickCount = 0
@@ -50,22 +68,24 @@ class TriviaViewController: UIViewController {
     struct TriviaStruct {
         var questionHeaderText: String
         var question: String
-        var answerOption1: String
-        var answerOption2: String
-        var answerOption3: String
-        var answerOption4: String
+        var correct_answer: String
+        var incorrect_answer1: String
+        var incorrect_answer2: String
+        var incorrect_answer3: String
+        var category: String
     }
+    
     var triviaQuestions: [TriviaStruct] = [
         //index 0
-        TriviaStruct(questionHeaderText: "Question: 1/5", question: "What country ranks #1 for hosting international students?", answerOption1: "New Zealand", answerOption2: "United States", answerOption3: "Brazil", answerOption4: "Germany"),
+        TriviaStruct(questionHeaderText: "Question: 1/5", question: "What country ranks #1 for hosting international students?", correct_answer: "New Zealand", incorrect_answer1: "United States", incorrect_answer2: "Brazil", incorrect_answer3: "Germany", category: "History"),
         //index 1
-        TriviaStruct(questionHeaderText: "Question: 2/5", question: "What was the shortest war in history?", answerOption1: "The Falklands War", answerOption2: "The Georgian-Armenian War", answerOption3: "The Anglo-Zanibar War", answerOption4: "The Sino-Vietnamese War"),
+        TriviaStruct(questionHeaderText: "Question: 2/5", question: "What was the shortest war in history?", correct_answer: "The Falklands War", incorrect_answer1: "The Georgian-Armenian War", incorrect_answer2: "The Anglo-Zanibar War", incorrect_answer3: "The Sino-Vietnamese War", category: "History"),
         //index 2
-        TriviaStruct(questionHeaderText: "Question: 3/5", question: "What Amendment to the U.S. Constitution took 200 years, 7 months and 10 days to ratify?", answerOption1: "2nd Amendment", answerOption2: "13th Amendment", answerOption3: "24th Amendment", answerOption4: "27th Amendment"),
+        TriviaStruct(questionHeaderText: "Question: 3/5", question: "What Amendment to the U.S. Constitution took 200 years, 7 months and 10 days to ratify?", correct_answer: "2nd Amendment", incorrect_answer1: "13th Amendment", incorrect_answer2: "24th Amendment", incorrect_answer3: "27th Amendment", category: "History"),
         //index 3
-        TriviaStruct(questionHeaderText: "Question: 4/5", question: "What is the name of the Artificial Intelligence system in the 1983 film, \"WarGames?\"", answerOption1: "Self Evolving Thought Helix", answerOption2: "Master Control Program", answerOption3: "War Operation Plan Response", answerOption4: "West Campus Analog Computer"),
+        TriviaStruct(questionHeaderText: "Question: 4/5", question: "What is the name of the Artificial Intelligence system in the 1983 film, \"WarGames?\"", correct_answer: "Self Evolving Thought Helix", incorrect_answer1: "Master Control Program", incorrect_answer2: "War Operation Plan Response", incorrect_answer3: "West Campus Analog Computer", category: "History"),
         //index 4
-        TriviaStruct(questionHeaderText: "Question: 5/5", question: "What is the most common time signature for rock songs?", answerOption1: "4/4", answerOption2: "1/2", answerOption3: "8/12", answerOption4: "2/4"), //index 2
+        TriviaStruct(questionHeaderText: "Question: 5/5", question: "What is the most common time signature for rock songs?", correct_answer: "4/4", incorrect_answer1: "1/2", incorrect_answer2: "8/12", incorrect_answer3: "2/4", category: "History")
     ]
     
     /*Computed property observer in Swift. Used to trigger the configure()
@@ -83,32 +103,17 @@ class TriviaViewController: UIViewController {
         return clickCount >= maxClickCount || currentQuestionIndex >= triviaQuestions.count
     }
     
-    func setCorrectAnswer() {
+    func setcorrect_answer() {
         guard let currentQuestion = triviaQuestions[safe: currentQuestionIndex] else {
             print("Error: Unable to set correct answer. Invalid question index.")
             return
         }
         
-        /*The ? in titleLabel is an optional chaining operator.
-         Allows accessing properties and methods on an
-         optional value*/
-        /*The ?? after .text is a nil-coalescing operator. It
-         provides a default value (e.g. "") if the text's
-         value is nil*/
-        switch currentQuestionIndex {
-        case 0:
-            correctAnswer = currentQuestion.answerOption2
-        case 1:
-            correctAnswer = currentQuestion.answerOption3
-        case 2:
-            correctAnswer = currentQuestion.answerOption4
-        case 3:
-            correctAnswer = currentQuestion.answerOption3
-        case 4:
-            correctAnswer = currentQuestion.answerOption1
-        default:
-            break
-        }
+        // The correct answer is already set to the correct_answer field
+        correct_answer = currentQuestion.correct_answer
+        
+        // Prints the correct answer to verify it's assigned correctly
+        print("Correct answer: \(correct_answer)")
     }
     
     func showAlert(_ message: String) {
@@ -135,28 +140,54 @@ class TriviaViewController: UIViewController {
         clickCount = 0
         correctCount = 0
         currentQuestionIndex = 0
+        
+        triviaService.fetchTriviaQuestions(amount: 5, difficulty: "easy", type: "multiple", triviaViewController: self) { [weak self] (questions, category, error) in
+                if let error = error {
+                    print("Error fetching trivia questions: \(error)")
+                    // Handle the error, e.g., show an alert to the user
+                } else if let questions = questions {
+                    // Clear the existing triviaQuestions array
+                    self?.triviaQuestions.removeAll()
+                    
+                    // Populate the triviaQuestions array with the fetched questions
+                    self?.triviaQuestions.append(contentsOf: questions)
+                    
+                    
+                    self?.configure()
+                } else {
+                    print("No questions fetched from the API.")
+                }
+            }
     }
-    
     
     func configure() {
         print("Configuring UI with new questions...")
+        
         // Guard statement to ensure currentQuestionIndex stays within bounds
-        guard (currentQuestionIndex < triviaQuestions.count) else {
+        guard let currentQuestion = triviaQuestions[safe: currentQuestionIndex] else {
+            print("Error: Current question is nil or out of bounds.")
             return
         }
         
-        var currentQuestion = triviaQuestions[currentQuestionIndex]
-        /* Sets questionHeaderText to the appropriate value based on the current question index so it can be updated with the correct question number each time a new question is displayed */
-        currentQuestion.questionHeaderText = "Question: \(currentQuestionIndex + 1)/\(triviaQuestions.count)"
-        questionHeader.text = currentQuestion.questionHeaderText
-        QuestionAsked.text = (currentQuestion.question)
-        answerButton1.setTitle(currentQuestion.answerOption1, for: .normal)
-        answerButton2.setTitle(currentQuestion.answerOption2, for: .normal)
-        answerButton3.setTitle(currentQuestion.answerOption3, for: .normal)
-        answerButton4.setTitle(currentQuestion.answerOption4, for: .normal)
+        /*Sets questionHeaderText to the appropriate value based on the current question index*/
+        let questionHeaderText = "Question: \(currentQuestionIndex + 1)/\(triviaQuestions.count)"
         
-        //Call setCorrectAnswer before it's needed
-        setCorrectAnswer()
+        // Print the current question to check its values
+           print("Current question: \(currentQuestion)")
+        
+        // Perform UI updates on the main thread
+        DispatchQueue.main.async { [weak self] in
+            self?.questionHeader.text = questionHeaderText
+            self?.CategoryLabel.text = currentQuestion.category
+            self?.QuestionAsked.text = currentQuestion.question
+           self?.answerButton1.setTitle(currentQuestion.correct_answer, for: .normal)
+           self?.answerButton2.setTitle(currentQuestion.incorrect_answer1, for: .normal)
+           self?.answerButton3.setTitle(currentQuestion.incorrect_answer2, for: .normal)
+           self?.answerButton4.setTitle(currentQuestion.incorrect_answer3, for: .normal)
+        }
+       
+        //Call setcorrect_answer before it's needed
+        setcorrect_answer()
     }
     
     /*Triggered when the user taps an answer button. Updates the score when the user clicks on the button AND checks if
@@ -179,9 +210,10 @@ class TriviaViewController: UIViewController {
             return
         }
         
-        if (selectedAnswer == correctAnswer) {
+        if (selectedAnswer == correct_answer) {
             correctCount += 1
         }
+        
         
         //Check if game has ended
         if (checkGameEnd()) {
@@ -189,16 +221,7 @@ class TriviaViewController: UIViewController {
         } else {
             currentQuestionIndex += 1
             configure()
-//            currentQuestionIndex += 1
         }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        /*ensures that the correct answer is executed before ANY user
-          interaction occurs, including the first button tap*/
-        setCorrectAnswer()
     }
     
     override func viewDidLayoutSubviews() {
@@ -222,5 +245,13 @@ class TriviaViewController: UIViewController {
         answerButton3.clipsToBounds = true
         answerButton4.layer.cornerRadius = answerButton4.frame.height / 7.5
         answerButton4.clipsToBounds = true
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Perform any additional setup after loading the view.
+        
+        // Example setup tasks
+        configure()
     }
 }

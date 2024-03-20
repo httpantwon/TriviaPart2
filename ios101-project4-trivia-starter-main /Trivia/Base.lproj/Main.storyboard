@@ -111,6 +111,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="CategoryLabel" destination="qCN-qk-kKv" id="QJA-Os-XZa"/>
                         <outlet property="QuestionAsked" destination="Hr0-4v-oW9" id="dbk-hh-dUj"/>
                         <outlet property="answerButton1" destination="SZk-Wf-GPT" id="Ayp-W6-cd2"/>
                         <outlet property="answerButton2" destination="qO7-uD-Ci8" id="7ey-YJ-WOk"/>

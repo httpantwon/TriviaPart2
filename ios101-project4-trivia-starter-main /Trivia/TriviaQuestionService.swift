@@ -19,24 +19,23 @@ struct TriviaResponse: Decodable {
 
 
 struct TriviaQuestion: Decodable {
-    let type: String
-    let difficulty: String
     let category: String
     let question: String
-    let correctAnswer: String?
-    let incorrectAnswers: [String]?
+    let correct_answer: String
+    let incorrect_answers: [String]
 }
 
-class TriviaQuestionService {
-    static let shared = TriviaQuestionService()
+public class TriviaQuestionService {
+    public static let shared = TriviaQuestionService()
     private let apiURL = "https://opentdb.com/api.php" // Base URL
     
-    private init() { // Private initializer to enforce singleton
+    /*Ensures I can create instances of TriviaQuestionService using the default initializer syntax 'TriviaQuestionService()'. public keyword means I can use instances of it in other Swift files*/
+    public init() { // Public initializer to enforce singleton
         
     }
     
     /*To fetch trivia questions from the API, this method will make a network request to the API and parse the response. Attempts to decode the JSON response from the API into a TriviaResponse object. The responseCode is expected to be present in the JSON response*/
-    func fetchTriviaQuestions(amount: Int, difficulty: String, type: String, triviaViewController: TriviaViewController, completion: @escaping ([TriviaViewController.TriviaStruct]?, Error?) -> Void) {
+    func fetchTriviaQuestions(amount: Int, difficulty: String, type: String, triviaViewController: TriviaViewController, completion: @escaping ([TriviaViewController.TriviaStruct]?, String?, Error?) -> Void) {
         // Construct URL with query parameters
         var urlComponents = URLComponents(string: apiURL)
         urlComponents?.queryItems = [
@@ -47,46 +46,66 @@ class TriviaQuestionService {
         
         guard let url = urlComponents?.url else {
             print("Invalid URL")
-            completion(nil, NSError(domain: "Invalid URL", code: 0, userInfo: nil))
+            completion(nil, nil, NSError(domain: "Invalid URL", code: 0, userInfo: nil))
             return
         }
-        
-        print("Fetching questions from URL: \(url)")
         
         // Create a URL session
         let session = URLSession.shared
         
         // Make the network request that fetches data from the API asynchronously
         let task = session.dataTask(with: url) { (data: Data?, response: URLResponse?, error: Error?) in
-            
-            if let error = error { //if error is not nil (an error occured during the network request)
+            if let error = error { //check for errors
                     print("Error fetching data: \(error)")
-                    completion(nil, error)
+                    completion(nil, nil, error)
                     return
                 }
             
-            // Check for errors
-            guard let data = data, error == nil else {
-                completion(nil, error)
+        // Check for errors
+        guard let data = data else {
+            print("No data received")
+            completion(nil, nil, NSError(domain: "No data received", code: 0, userInfo: nil))
+            return
+        }
+        
+        do {
+            /*Parse JSON response into TriviaResponse struct, which contains an array of TriviaQuestion objects and handles errors*/
+            let decoder = JSONDecoder()
+            let triviaResponse = try decoder.decode(TriviaResponse.self, from: data)
+            
+            // Extract category from the first question
+            guard let firstQuestion = triviaResponse.results.first else {
+                print("No questions in response")
+                completion(nil, nil, NSError(domain: "No questions in response", code: 0, userInfo: nil))
                 return
             }
             
-            do {
-                /*Parse JSON response into TriviaResponse struct, which contains an array of TriviaQuestion objects and handles errors*/
-                let decoder = JSONDecoder()
-                let triviaResponse = try decoder.decode(TriviaResponse.self, from: data)
+            let category = firstQuestion.category
+            /*Extract trivia questions from the response, directly creating instances of TriviaViewController.TriviaStruct while mapping over triviaResponse.results*/
+            let triviaQuestions = triviaResponse.results.map { result in
+//                let correct_answer = result.correct_answer
+                let incorrect_answers = result.incorrect_answers
+                return TriviaViewController.TriviaStruct(
+                    questionHeaderText: "",
+                    /*Decode HTML entities here*/
+                    question: result.question.decodeHTMLEntities() ?? "",
+                    correct_answer: result.correct_answer.decodeHTMLEntities() ?? "",
+                    incorrect_answer1: incorrect_answers.indices.contains(0) ? incorrect_answers[0].decodeHTMLEntities() ?? "" : "",
+                    incorrect_answer2: incorrect_answers.indices.contains(1) ? incorrect_answers[1].decodeHTMLEntities() ?? "" : "",
+                    incorrect_answer3: incorrect_answers.indices.contains(2) ? incorrect_answers[2].decodeHTMLEntities() ?? "" : "", category: category
+                )
+            }
                 
-                /*Extract trivia questions from the response, directly creating instances of
-                  TriviaViewController.TriviaStruct while mapping over triviaResponse.results*/
-                var triviaQuestions = triviaResponse.results.map { result in
-                    TriviaViewController.TriviaStruct(questionHeaderText: "", question: result.question, answerOption1: result.correctAnswer!, answerOption2: result.incorrectAnswers![0], answerOption3: result.incorrectAnswers![1], answerOption4: result.incorrectAnswers![2])
-                }
-                
-                // Call completion handler with trivia questions
-                completion(triviaQuestions, nil)
+            // Call completion handler with trivia questions
+            if let firstCategory = triviaResponse.results.first?.category {
+                completion(triviaQuestions, firstCategory, nil)
+            } else {
+                completion(nil, nil, NSError(domain: "No category found", code: 0, userInfo: nil))
+            }
+            
             } catch {
                 print("Error decoding JSON: \(error)") // Print error message
-                completion(nil, error)
+                completion(nil, nil, error)
             }
         }
             // Resume the task
