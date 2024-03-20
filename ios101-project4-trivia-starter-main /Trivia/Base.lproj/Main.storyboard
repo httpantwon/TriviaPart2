@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2Y7-m3-Ra8">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--TriviaViewController-->
+        <scene sceneID="3ey-RD-bmY">
+            <objects>
+                <viewController id="2Y7-m3-Ra8" userLabel="TriviaViewController" customClass="TriviaViewController" customModule="TriviaPart2" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Srg-vi-fW0">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Question: 1/5" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6PH-xY-c4P">
+                                <rect key="frame" x="122.66666666666669" y="79" width="148" height="29"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="History" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qCN-qk-kKv">
+                                <rect key="frame" x="166.66666666666666" y="113" width="60" height="21"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What country ranks #1 for hosting international students?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hr0-4v-oW9" userLabel="Question Asked">
+                                <rect key="frame" x="12" y="148.66666666666663" width="369" height="253"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="253" id="FfB-aO-unf"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="31"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SZk-Wf-GPT" userLabel="NZButton">
+                                <rect key="frame" x="17" y="418.33333333333331" width="359" height="38"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="0.69491390306122447" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="New Zealand">
+                                    <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="answerButton1:" destination="2Y7-m3-Ra8" eventType="touchUpInside" id="oGZ-pu-dHU"/>
+                                    <action selector="answerButtonTapped:" destination="2Y7-m3-Ra8" eventType="touchUpInside" id="FHV-fx-PO9"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qO7-uD-Ci8" userLabel="USButton">
+                                <rect key="frame" x="17" y="464.33333333333331" width="359" height="39"/>
+                                <color key="backgroundColor" white="0.66666666669999997" alpha="0.69491390310000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="United States">
+                                    <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="answerButton2:" destination="2Y7-m3-Ra8" eventType="touchUpInside" id="5rd-8t-dXb"/>
+                                    <action selector="answerButtonTapped:" destination="2Y7-m3-Ra8" eventType="touchUpInside" id="c94-Yn-tZN"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lLO-3c-cKe" userLabel="BrazilButton">
+                                <rect key="frame" x="17" y="510.66666666666674" width="359" height="39"/>
+                                <color key="backgroundColor" white="0.66666666669999997" alpha="0.69491390310000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="Brazil">
+                                    <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="answerButton3:" destination="2Y7-m3-Ra8" eventType="touchUpInside" id="sJq-rA-gAF"/>
+                                    <action selector="answerButtonTapped:" destination="2Y7-m3-Ra8" eventType="touchUpInside" id="AXU-B3-iWL"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hRq-t8-ftN" userLabel="GermanyButton">
+                                <rect key="frame" x="17" y="557.66666666666663" width="359" height="39"/>
+                                <color key="backgroundColor" white="0.66666666669999997" alpha="0.69491390310000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="Germany">
+                                    <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="answerButton4:" destination="2Y7-m3-Ra8" eventType="touchUpInside" id="vOx-eN-tBi"/>
+                                    <action selector="answerButtonTapped:" destination="2Y7-m3-Ra8" eventType="touchUpInside" id="X5l-8x-WuL"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="s78-iJ-Hl2"/>
+                        <color key="backgroundColor" red="0.28115156870000002" green="0.62844313789999995" blue="0.60534296330000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstItem="Hr0-4v-oW9" firstAttribute="leading" secondItem="s78-iJ-Hl2" secondAttribute="leading" constant="12" id="8vN-YF-MmX"/>
+                            <constraint firstItem="hRq-t8-ftN" firstAttribute="trailing" secondItem="lLO-3c-cKe" secondAttribute="trailing" id="9ZI-jf-O1Z"/>
+                            <constraint firstItem="qCN-qk-kKv" firstAttribute="centerX" secondItem="Srg-vi-fW0" secondAttribute="centerX" id="DQa-Yj-wPd"/>
+                            <constraint firstItem="Hr0-4v-oW9" firstAttribute="top" secondItem="6PH-xY-c4P" secondAttribute="bottom" constant="40.666666666666629" id="EFb-tG-wOv"/>
+                            <constraint firstItem="qO7-uD-Ci8" firstAttribute="firstBaseline" secondItem="SZk-Wf-GPT" secondAttribute="baseline" constant="46.666666666666664" symbolType="layoutAnchor" id="FXT-rk-nJg"/>
+                            <constraint firstItem="lLO-3c-cKe" firstAttribute="firstBaseline" secondItem="qO7-uD-Ci8" secondAttribute="baseline" constant="47" symbolType="layoutAnchor" id="I5C-Aq-g5n"/>
+                            <constraint firstItem="hRq-t8-ftN" firstAttribute="firstBaseline" secondItem="lLO-3c-cKe" secondAttribute="baseline" constant="47" symbolType="layoutAnchor" id="IF8-Sa-qd4"/>
+                            <constraint firstItem="qO7-uD-Ci8" firstAttribute="trailing" secondItem="SZk-Wf-GPT" secondAttribute="trailing" id="InB-dG-dFc"/>
+                            <constraint firstItem="hRq-t8-ftN" firstAttribute="leading" secondItem="lLO-3c-cKe" secondAttribute="leading" id="Jhj-nb-Toi"/>
+                            <constraint firstItem="lLO-3c-cKe" firstAttribute="trailing" secondItem="qO7-uD-Ci8" secondAttribute="trailing" id="O3a-DA-bxT"/>
+                            <constraint firstItem="SZk-Wf-GPT" firstAttribute="top" secondItem="Hr0-4v-oW9" secondAttribute="bottom" constant="16.666666666666686" id="PpD-BL-YT4"/>
+                            <constraint firstItem="qCN-qk-kKv" firstAttribute="top" secondItem="6PH-xY-c4P" secondAttribute="bottom" constant="5" id="QBV-2w-JNf"/>
+                            <constraint firstItem="lLO-3c-cKe" firstAttribute="leading" secondItem="qO7-uD-Ci8" secondAttribute="leading" id="Tdc-zT-keI"/>
+                            <constraint firstItem="6PH-xY-c4P" firstAttribute="centerX" secondItem="Srg-vi-fW0" secondAttribute="centerX" id="a2a-Lz-rmg"/>
+                            <constraint firstItem="qO7-uD-Ci8" firstAttribute="centerX" secondItem="s78-iJ-Hl2" secondAttribute="centerX" id="cJp-cY-U01"/>
+                            <constraint firstItem="lLO-3c-cKe" firstAttribute="centerX" secondItem="qO7-uD-Ci8" secondAttribute="centerX" id="ihs-XW-g92"/>
+                            <constraint firstItem="qO7-uD-Ci8" firstAttribute="leading" secondItem="SZk-Wf-GPT" secondAttribute="leading" id="onS-yL-dWK"/>
+                            <constraint firstItem="6PH-xY-c4P" firstAttribute="top" secondItem="s78-iJ-Hl2" secondAttribute="top" constant="20" id="rXm-pb-59G"/>
+                            <constraint firstItem="Hr0-4v-oW9" firstAttribute="trailing" secondItem="s78-iJ-Hl2" secondAttribute="trailing" constant="-12" id="ray-P6-GUe"/>
+                            <constraint firstItem="SZk-Wf-GPT" firstAttribute="leading" secondItem="Hr0-4v-oW9" secondAttribute="leading" constant="5" id="sJ4-Bx-cBa"/>
+                            <constraint firstItem="SZk-Wf-GPT" firstAttribute="centerX" secondItem="s78-iJ-Hl2" secondAttribute="centerX" id="xyF-kQ-524"/>
+                            <constraint firstItem="hRq-t8-ftN" firstAttribute="centerX" secondItem="qO7-uD-Ci8" secondAttribute="centerX" id="yjw-bx-i5T"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="QuestionAsked" destination="Hr0-4v-oW9" id="dbk-hh-dUj"/>
+                        <outlet property="answerButton1" destination="SZk-Wf-GPT" id="Ayp-W6-cd2"/>
+                        <outlet property="answerButton2" destination="qO7-uD-Ci8" id="7ey-YJ-WOk"/>
+                        <outlet property="answerButton3" destination="lLO-3c-cKe" id="bQB-Mn-wZ2"/>
+                        <outlet property="answerButton4" destination="hRq-t8-ftN" id="4hn-XS-P1h"/>
+                        <outlet property="questionHeader" destination="6PH-xY-c4P" id="zno-xK-CxR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8je-jj-xAM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-382.44274809160305" y="14.788732394366198"/>
+        </scene>
+    </scenes>
+    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+</document>
