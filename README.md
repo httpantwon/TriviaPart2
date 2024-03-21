@@ -24,7 +24,7 @@ Here is a reminder on how to embed Loom videos on GitHub. Feel free to remove th
 
 ## Notes
 
-I was not able to properly finish this project. I could not get each category of a question to update. I also could not get the user to choose a specific category and difficulty of the questions
+I could not get the user to choose a specific category and difficulty of the questions
 
 ## License
 
