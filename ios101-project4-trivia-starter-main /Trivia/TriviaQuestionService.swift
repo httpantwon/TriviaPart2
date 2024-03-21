@@ -7,36 +7,37 @@
 
 import Foundation
 
-struct TriviaResponse: Decodable {
-    /* responseCode property presents a status code returned by the API to indicate the status of the request. A common practice in APIs is to use HTTP status code 200 for success, 404 for not found, 500 for server error, etc.
-     
-       By making responseCode optional, the decoding process will not fail if the
-       key is missing from the JSON response */
-    let responseCode: Int?
-    /* Contains an array of TriviaQuestion objects, which are the actual trivia questions retrieved from the API*/
-    let results: [TriviaQuestion]
-}
-
-
 struct TriviaQuestion: Decodable {
+    let type: String
     let category: String
     let question: String
     let correct_answer: String
     let incorrect_answers: [String]
 }
 
+struct TriviaResponse: Decodable {
+    /* The responseCode property presents a status code returned by the API to indicate the status of the request. A common practice in APIs is to use HTTP status code 200 for success, 404 for not found, 500 for server error, etc. By making responseCode optional, the decoding process will not fail if the key is missing from the JSON response */
+    let responseCode: Int?
+                 
+    /* Contains an array of TriviaQuestion objects, which are the actual trivia questions retrieved from the API */
+    let results: [TriviaQuestion]
+}
+
 public class TriviaQuestionService {
+    
+    /* Initializes a shared property with a new instance of the TriviaQuestionService class */
     public static let shared = TriviaQuestionService()
     private let apiURL = "https://opentdb.com/api.php" // Base URL
     
-    /*Ensures I can create instances of TriviaQuestionService using the default initializer syntax 'TriviaQuestionService()'. public keyword means I can use instances of it in other Swift files*/
+    /* Ensures I can create instances of TriviaQuestionService using the default initializer syntax 'TriviaQuestionService()'. public keyword means I can use instances of it in other Swift files */
     public init() { // Public initializer to enforce singleton
         
     }
     
-    /*To fetch trivia questions from the API, this method will make a network request to the API and parse the response. Attempts to decode the JSON response from the API into a TriviaResponse object. The responseCode is expected to be present in the JSON response*/
+    /* To fetch trivia questions from the API, this method will make a network request to the API and parse the response. Attempts to decode the JSON response from the API into a TriviaResponse object. The responseCode is expected to be present in the JSON response */
     func fetchTriviaQuestions(amount: Int, difficulty: String, type: String, triviaViewController: TriviaViewController, completion: @escaping ([TriviaViewController.TriviaStruct]?, String?, Error?) -> Void) {
-        // Construct URL with query parameters
+        
+        /* Construct URL with query parameters. URLComponents allow me to break down a URL into its constituent parts (scheme, host, path, query parameters, etc.) and vice versa */
         var urlComponents = URLComponents(string: apiURL)
         urlComponents?.queryItems = [
             URLQueryItem(name: "amount", value: String(amount)),
@@ -50,16 +51,16 @@ public class TriviaQuestionService {
             return
         }
         
-        // Create a URL session
+        /* Creates a URL session to perform network requests in the app. It provides an interface for downloading/uploading data from/to remote locations such as APIs */
         let session = URLSession.shared
         
         // Make the network request that fetches data from the API asynchronously
         let task = session.dataTask(with: url) { (data: Data?, response: URLResponse?, error: Error?) in
             if let error = error { //check for errors
-                    print("Error fetching data: \(error)")
-                    completion(nil, nil, error)
-                    return
-                }
+                print("Error fetching data: \(error)")
+                completion(nil, nil, error)
+                return
+            }
             
         // Check for errors
         guard let data = data else {
@@ -72,18 +73,9 @@ public class TriviaQuestionService {
             /*Parse JSON response into TriviaResponse struct, which contains an array of TriviaQuestion objects and handles errors*/
             let decoder = JSONDecoder()
             let triviaResponse = try decoder.decode(TriviaResponse.self, from: data)
-            
-            // Extract category from the first question
-            guard let firstQuestion = triviaResponse.results.first else {
-                print("No questions in response")
-                completion(nil, nil, NSError(domain: "No questions in response", code: 0, userInfo: nil))
-                return
-            }
-            
-            let category = firstQuestion.category
+        
             /*Extract trivia questions from the response, directly creating instances of TriviaViewController.TriviaStruct while mapping over triviaResponse.results*/
             let triviaQuestions = triviaResponse.results.map { result in
-//                let correct_answer = result.correct_answer
                 let incorrect_answers = result.incorrect_answers
                 return TriviaViewController.TriviaStruct(
                     questionHeaderText: "",
@@ -92,7 +84,7 @@ public class TriviaQuestionService {
                     correct_answer: result.correct_answer.decodeHTMLEntities() ?? "",
                     incorrect_answer1: incorrect_answers.indices.contains(0) ? incorrect_answers[0].decodeHTMLEntities() ?? "" : "",
                     incorrect_answer2: incorrect_answers.indices.contains(1) ? incorrect_answers[1].decodeHTMLEntities() ?? "" : "",
-                    incorrect_answer3: incorrect_answers.indices.contains(2) ? incorrect_answers[2].decodeHTMLEntities() ?? "" : "", category: category
+                    incorrect_answer3: incorrect_answers.indices.contains(2) ? incorrect_answers[2].decodeHTMLEntities() ?? "" : "", category: result.category.decodeHTMLEntities() ?? ""
                 )
             }
                 

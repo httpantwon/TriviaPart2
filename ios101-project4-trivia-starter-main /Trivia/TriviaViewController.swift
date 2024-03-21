@@ -57,12 +57,13 @@ class TriviaViewController: UIViewController {
     @IBAction func answerButton4(_ sender: UIButton) {
     }
     let triviaService = TriviaQuestionService()
-    let maxClickCount = 5
+    
     
     var correct_answer = ""
     var gameOverTitle = "Game Over!"
     var gameOverMessage = ""
     var clickCount = 0
+    let maxClickCount = 5
     var correctCount = 0
     
     struct TriviaStruct {
@@ -76,16 +77,7 @@ class TriviaViewController: UIViewController {
     }
     
     var triviaQuestions: [TriviaStruct] = [
-        //index 0
-        TriviaStruct(questionHeaderText: "Question: 1/5", question: "What country ranks #1 for hosting international students?", correct_answer: "New Zealand", incorrect_answer1: "United States", incorrect_answer2: "Brazil", incorrect_answer3: "Germany", category: "History"),
-        //index 1
-        TriviaStruct(questionHeaderText: "Question: 2/5", question: "What was the shortest war in history?", correct_answer: "The Falklands War", incorrect_answer1: "The Georgian-Armenian War", incorrect_answer2: "The Anglo-Zanibar War", incorrect_answer3: "The Sino-Vietnamese War", category: "History"),
-        //index 2
-        TriviaStruct(questionHeaderText: "Question: 3/5", question: "What Amendment to the U.S. Constitution took 200 years, 7 months and 10 days to ratify?", correct_answer: "2nd Amendment", incorrect_answer1: "13th Amendment", incorrect_answer2: "24th Amendment", incorrect_answer3: "27th Amendment", category: "History"),
-        //index 3
-        TriviaStruct(questionHeaderText: "Question: 4/5", question: "What is the name of the Artificial Intelligence system in the 1983 film, \"WarGames?\"", correct_answer: "Self Evolving Thought Helix", incorrect_answer1: "Master Control Program", incorrect_answer2: "War Operation Plan Response", incorrect_answer3: "West Campus Analog Computer", category: "History"),
-        //index 4
-        TriviaStruct(questionHeaderText: "Question: 5/5", question: "What is the most common time signature for rock songs?", correct_answer: "4/4", incorrect_answer1: "1/2", incorrect_answer2: "8/12", incorrect_answer3: "2/4", category: "History")
+        
     ]
     
     /*Computed property observer in Swift. Used to trigger the configure()
@@ -151,8 +143,7 @@ class TriviaViewController: UIViewController {
                     
                     // Populate the triviaQuestions array with the fetched questions
                     self?.triviaQuestions.append(contentsOf: questions)
-                    
-                    
+ 
                     self?.configure()
                 } else {
                     print("No questions fetched from the API.")
@@ -180,10 +171,10 @@ class TriviaViewController: UIViewController {
             self?.questionHeader.text = questionHeaderText
             self?.CategoryLabel.text = currentQuestion.category
             self?.QuestionAsked.text = currentQuestion.question
-           self?.answerButton1.setTitle(currentQuestion.correct_answer, for: .normal)
-           self?.answerButton2.setTitle(currentQuestion.incorrect_answer1, for: .normal)
-           self?.answerButton3.setTitle(currentQuestion.incorrect_answer2, for: .normal)
-           self?.answerButton4.setTitle(currentQuestion.incorrect_answer3, for: .normal)
+            self?.answerButton1.setTitle(currentQuestion.correct_answer, for: .normal)
+            self?.answerButton2.setTitle(currentQuestion.incorrect_answer1, for: .normal)
+            self?.answerButton3.setTitle(currentQuestion.incorrect_answer2, for: .normal)
+            self?.answerButton4.setTitle(currentQuestion.incorrect_answer3, for: .normal)
         }
        
         //Call setcorrect_answer before it's needed
@@ -213,7 +204,6 @@ class TriviaViewController: UIViewController {
         if (selectedAnswer == correct_answer) {
             correctCount += 1
         }
-        
         
         //Check if game has ended
         if (checkGameEnd()) {
@@ -250,8 +240,21 @@ class TriviaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Perform any additional setup after loading the view.
-        
-        // Example setup tasks
-        configure()
+        // Fetch trivia questions from the API when the view loads
+        triviaService.fetchTriviaQuestions(amount: 5, difficulty: "easy", type: "multiple", triviaViewController: self) { [weak self] (questions, category, error) in
+            if let error = error {
+                print("Error fetching trivia questions: \(error)")
+                
+                // Handle the error, e.g., show an alert to the user
+            } else if let questions = questions {
+                // Populate the triviaQuestions array with the fetched questions
+                self?.triviaQuestions = questions
+                
+                // Configure the UI with the fetched questions
+                self?.configure()
+            } else {
+                print("No questions fetched from the API.")
+            }
+        }
     }
 }
