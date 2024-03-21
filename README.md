@@ -20,7 +20,7 @@ The following **required** functionality is completed:
 
 Here is a reminder on how to embed Loom videos on GitHub. Feel free to remove this reminder once you upload your README. 
 
-[Guide](https://youtu.be/0W7mO1XXEKc).
+[Guide](https://youtu.be/N8_gDqhGGgQ).
 
 ## Notes
 
