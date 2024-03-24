@@ -2,7 +2,7 @@
 
 Submitted by: **Antwon Walls**
 
-**Trivia Pt. 2** is an app that fetches real trivia data from the Open Trivia Database API, allowing users to choose form live questions from Trivia servers instead of pre-made questions from part 1 
+**Trivia Pt. 2** is an app that fetches real trivia data from the Open Trivia Database API, allowing users to answer live questions from Trivia servers instead of pre-made questions from part 1
 
 Time spent: **5** hours spent in total
 
